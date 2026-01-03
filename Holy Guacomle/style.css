@@ -310,3 +310,34 @@ body {
   bottom: 6px;
   left: 9px;
 }
+
+
+
+
+/* MOBILE CONTROLS */
+#mobile-controls {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: none;
+  justify-content: space-around;
+  pointer-events: auto;
+}
+
+#mobile-controls button {
+  width: 70px;
+  height: 70px;
+  font-size: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  backdrop-filter: blur(5px);
+}
+
+/* Show controls only on mobile */
+@media (max-width: 768px) {
+  #mobile-controls {
+    display: flex;
+  }
+}

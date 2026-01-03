@@ -139,3 +139,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+
+
+
+// MOBILE CONTROLS
+const leftBtn = document.getElementById("left-btn");
+const rightBtn = document.getElementById("right-btn");
+const shootBtn = document.getElementById("shoot-btn");
+
+let moveInterval = null;
+
+function startMove(dir) {
+  stopMove();
+  moveInterval = setInterval(() => {
+    if (!gameRunning) return;
+    playerX += dir * 10;
+  }, 30);
+}
+
+function stopMove() {
+  clearInterval(moveInterval);
+}
+
+leftBtn.addEventListener("touchstart", () => startMove(-1));
+rightBtn.addEventListener("touchstart", () => startMove(1));
+leftBtn.addEventListener("touchend", stopMove);
+rightBtn.addEventListener("touchend", stopMove);
+
+shootBtn.addEventListener("touchstart", () => {
+  if (gameRunning) shoot();
+});
