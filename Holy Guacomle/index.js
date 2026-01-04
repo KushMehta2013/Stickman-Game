@@ -170,3 +170,94 @@ rightBtn.addEventListener("touchend", stopMove);
 shootBtn.addEventListener("touchstart", () => {
   if (gameRunning) shoot();
 });
+
+
+const pauseBtn = document.getElementById("pause-btn");
+let paused = false;
+
+pauseBtn.onclick = () => {
+  paused = !paused;
+  pauseBtn.textContent = paused ? "▶ Resume" : "⏸ Pause";
+};
+
+
+const shootSound = new Audio("sounds/shoot.wav");
+const hitSound = new Audio("sounds/hit.wav");
+const bossSound = new Audio("sounds/boss.wav");
+
+shootSound.currentTime = 0;
+shootSound.play();
+
+hitSound.currentTime = 0;
+hitSound.play();
+
+
+let boss = null;
+let bossHealth = 0;
+
+function createBoss() {
+  if (boss) return;
+
+  const b = document.createElement("div");
+  b.className = "enemy boss";
+  b.innerHTML = `
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="mouth"></div>
+  `;
+
+  b.style.left = (window.innerWidth / 2 - 40) + "px";
+  b.style.top = "0px";
+  game.appendChild(b);
+
+  boss = { el: b, y: 0 };
+  bossHealth = 20;
+  bossSound.play();
+}
+if (score > 0 && score % 10 === 0 && !boss) {
+  createBoss();
+}
+
+if (boss) {
+  boss.y += 1.5;
+  boss.el.style.top = boss.y + "px";
+
+  bullets.forEach((b, bi) => {
+    if (isColliding(b.el, boss.el)) {
+      b.el.remove();
+      bullets.splice(bi, 1);
+      bossHealth--;
+      hitSound.play();
+
+      if (bossHealth <= 0) {
+        boss.el.remove();
+        boss = null;
+        score += 5;
+        scoreEl.textContent = "Score: " + score;
+      }
+    }
+  });
+}
+
+function getClosestEnemy() {
+  let closest = null;
+  let minDist = Infinity;
+
+  enemies.forEach(e => {
+    const dx = e.el.offsetLeft - playerX;
+    if (Math.abs(dx) < minDist) {
+      minDist = Math.abs(dx);
+      closest = e;
+    }
+  });
+
+  return closest;
+}
+
+const target = getClosestEnemy();
+if (target) {
+  const tx = target.el.offsetLeft;
+  const bx = parseFloat(b.el.style.left);
+  b.el.style.left = bx + (tx - bx) * 0.05 + "px";
+}
+

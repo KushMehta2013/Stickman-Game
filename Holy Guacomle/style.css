@@ -341,3 +341,25 @@ body {
     display: flex;
   }
 }
+
+
+#pause-btn {
+  margin-top: 10px;
+  padding: 5px 12px;
+  background: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+#pause-btn:hover {
+  background: #666;
+}
+
+
+.boss {
+  width: 80px;
+  height: 80px;
+  background: darkgreen;
+  border: 3px solid black;
+}
+
